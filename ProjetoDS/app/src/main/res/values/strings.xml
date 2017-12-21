@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ProjetoDS</string>
+    <string name="id">ID</string>
+    <string name="nome">Nome</string>
+    <string name="codigo">Código:</string>
+    <string name="loja">Loja:</string>
+    <string name="endereco">ENDEREÇO:</string>
+    <string name="logradouro">Logradouro:</string>
+    <string name="bairro">Bairro:</string>
+    <string name="complemento">Complemento:</string>
+    <string name="numero">Número:</string>
+    <string name="telefone">Telefone:</string>
+</resources>

@@ -1,0 +1,17 @@
+*.bak
+*.swp
+aws-android-sdk*.jar
+
+# build artifact
+target
+lint.xml
+gen/
+bin/
+.classpath
+.settings
+local.properties
+proguard-project.txt
+build.xml
+.gradle
+.idea
+build/
