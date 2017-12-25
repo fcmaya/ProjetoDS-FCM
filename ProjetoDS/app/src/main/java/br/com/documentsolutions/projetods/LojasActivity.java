@@ -1,16 +1,13 @@
 package br.com.documentsolutions.projetods;
 
 import android.app.ProgressDialog;
-import android.app.VoiceInteractor;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,8 +21,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.documentsolutions.projetods.objetos.Loja;
 
 
 public class LojasActivity extends AppCompatActivity implements MyAdpter.OnItemClickListener {
@@ -33,10 +33,12 @@ public class LojasActivity extends AppCompatActivity implements MyAdpter.OnItemC
     private static final String URL_DATA = "https://api.myjson.com/bins/hvcbf";
     public static final String EXTRA_ID = "ID";
     public static final String EXTRA_NOME = "NOME";
+    public static final String EXTRA_LOJA = "LOJA";
     private RecyclerView recyclerView;
-    //private RecyclerView.Adapter adapter;
     private MyAdpter adapter;
     private List<ListItem> listItems;
+    private Loja loja;
+    private ArrayList<Loja> arrayLojas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,10 @@ public class LojasActivity extends AppCompatActivity implements MyAdpter.OnItemC
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        criarPastasApp();
+
         listItems = new ArrayList<>();
+        arrayLojas = new ArrayList<>();
 
         loadRecyclerViewData();
 
@@ -75,6 +80,23 @@ public class LojasActivity extends AppCompatActivity implements MyAdpter.OnItemC
                                         o.getString("nome")
                                 );
                                 listItems.add(item);
+
+                                loja = new Loja();
+                                loja.setId(Long.valueOf(o.getString("id")));
+                                loja.setNome(o.getString("nome"));
+
+                                JSONObject p = o.getJSONObject("endereco");
+
+                                loja.setLogradouro(p.getString("logradouro"));
+                                loja.setBairro(p.getString("bairro"));
+                                loja.setComplemento(p.getString("complemento"));
+                                loja.setNumero(p.getString("numero"));
+
+                                loja.setTelefone(o.getString("telefone"));
+
+                                Log.v("ObjetoLoja", loja.getLogradouro().toString());
+
+                                arrayLojas.add(i, loja);
                              }
 
                              adapter = new MyAdpter(listItems, getApplicationContext());
@@ -102,11 +124,42 @@ public class LojasActivity extends AppCompatActivity implements MyAdpter.OnItemC
     @Override
     public void onItemClick(int position) {
         Intent detalhesLoja = new Intent(this, DetalhesActivity.class);
-        ListItem itemClicado = listItems.get(position);
 
-        detalhesLoja.putExtra(EXTRA_ID, itemClicado.getID());
-        detalhesLoja.putExtra(EXTRA_NOME, itemClicado.getNome());
+        Loja lojaDetalhe = arrayLojas.get(position);
+        Toast.makeText(this, "Loja: " + lojaDetalhe.getNome().toString(), Toast.LENGTH_SHORT).show();
 
+        detalhesLoja.putExtra(EXTRA_LOJA, lojaDetalhe);
         startActivity(detalhesLoja);
     }
+
+    private void criarPastasApp() {
+
+        String state = Environment.getExternalStorageState();
+        Log.d("Media State", state);
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            File appDirectory = new File(
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ProjetoDS/");
+
+            Log.d("appDirectroyExist", appDirectory.exists() + "");
+            if (!appDirectory.exists())
+                Log.d("appDir created: ", appDirectory.mkdir() + "");
+
+            File dbDirectory = new File(
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ProjetoDS/Camera/");
+
+            Log.d("dbDirectroyExist", dbDirectory.exists() + "");
+            if (!dbDirectory.exists())
+                Log.d("MissaoDir created: ", dbDirectory.mkdirs() + "");
+
+
+            File themesDirectory = new File(
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ProjetoDS/Galeria/");
+            Log.d("backupDirectroyExist", themesDirectory.exists() + "");
+            if (!themesDirectory.exists())
+                Log.d("backupDir created: ", themesDirectory.mkdirs() + "");
+
+        }
+    }
+
 }

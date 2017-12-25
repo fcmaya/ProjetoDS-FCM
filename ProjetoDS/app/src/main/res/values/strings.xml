@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjetoDS</string>
+    <string name="app_name">ProjetoDS - Fernando Maia</string>
     <string name="id">ID</string>
     <string name="nome">Nome</string>
     <string name="codigo">Código:</string>
@@ -10,4 +10,5 @@
     <string name="complemento">Complemento:</string>
     <string name="numero">Número:</string>
     <string name="telefone">Telefone:</string>
+    <string name="caputre">Caputre</string>
 </resources>

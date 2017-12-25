@@ -1,10 +1,6 @@
-package br.com.documentsolutions.projetods;
+package br.com.documentsolutions.projetods.objetos;
 
 import java.io.Serializable;
-
-/**
- * Created by Maia on 20/12/2017.
- */
 
 public class Loja implements Serializable {
 
